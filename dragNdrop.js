@@ -43,10 +43,7 @@ function setupDragEvents(selectedItem, itemClone, ghost, offset) {
     "mouseup",
     e => {
       document.removeEventListener("mousemove", mouseMoveFunc)
-      selectedItem.classList.remove("hide")
-      itemClone.remove()
-      ghost.remove()
-      console.log("Mouse up")
+      stopDrag(selectedItem, itemClone, ghost)
     },
     { once: true }
   )
@@ -55,4 +52,10 @@ function setupDragEvents(selectedItem, itemClone, ghost, offset) {
 function positionClone(itemClone, e, offset) {
   itemClone.style.top = `${e.clientY - offset.y}px`
   itemClone.style.left = `${e.clientX - offset.x}px`
+}
+
+function stopDrag(selectedItem, itemClone, ghost) {
+  selectedItem.classList.remove("hide")
+  itemClone.remove()
+  ghost.remove()
 }
