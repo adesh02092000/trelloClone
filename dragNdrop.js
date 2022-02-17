@@ -37,7 +37,6 @@ function setupDragEvents(selectedItem, itemClone, ghost, offset) {
     const dropZone = getDropZone(e.target)
     positionClone(itemClone, e, offset)
     if (dropZone == null) return
-    // dropZone == tasks
     const closestChild = Array.from(dropZone.children).find(child => {
       const rect = child.getBoundingClientRect()
       return e.clientY < rect.top + rect.height / 2
@@ -51,6 +50,10 @@ function setupDragEvents(selectedItem, itemClone, ghost, offset) {
     "mouseup",
     e => {
       document.removeEventListener("mousemove", mouseMoveFunc)
+      const dropZone = getDropZone(ghost) // get the drop zone based on the ghost position
+      if (dropZone) {
+        dropZone.insertBefore(selectedItem, ghost)
+      }
       stopDrag(selectedItem, itemClone, ghost)
     },
     { once: true }
