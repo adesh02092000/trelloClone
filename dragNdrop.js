@@ -2,7 +2,10 @@ import addGlobalEventListener from "./utils/addGlobalEventListener"
 
 export default function setup() {
   addGlobalEventListener("mousedown", "[data-draggable]", e => {
-    console.log("Mouse Down")
+    const selectedItem = e.target
+    const itemClone = selectedItem.cloneNode(true)
+    // Hide the selected item, from the original position
+    selectedItem.classList.add("hide")
 
     const mouseMoveFunc = () => {
       console.log("Mouse move")
@@ -16,6 +19,7 @@ export default function setup() {
       "mouseup",
       e => {
         document.removeEventListener("mousemove", mouseMoveFunc)
+        selectedItem.classList.remove("hide") // add the task once the mouse is up
         console.log("Mouse up")
       },
       { once: true } // Runs the event listener once and then removes it.
