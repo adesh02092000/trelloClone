@@ -26,16 +26,18 @@ function setupDragItems(selectedItem, itemClone, ghost, e) {
 
   ghost.style.height = `${originalRect.height}px`
   ghost.classList.add("ghost")
-  // ghost.innerHTML = ""
-  selectedItem.parentElement.insertBefore(ghost, selectedItem) // Insert the ghost before the selected item,
-  // Since the selected item will be hidden once it is moved, and the ghost will take it's place
+  ghost.innerHTML = ""
+  selectedItem.parentElement.insertBefore(ghost, selectedItem)
 
   return offset
 }
 
 function setupDragEvents(selectedItem, itemClone, ghost, offset) {
   const mouseMoveFunc = e => {
+    const dropZone = getDropZone(e.target) // e.target is the element where the cursor ends up (can be task, tasks or document)
     positionClone(itemClone, e, offset)
+    if (dropZone == null) return // item is placed outside of the drag zone
+    dropZone.append(ghost)
   }
   document.addEventListener("mousemove", mouseMoveFunc)
 
@@ -58,4 +60,9 @@ function stopDrag(selectedItem, itemClone, ghost) {
   selectedItem.classList.remove("hide")
   itemClone.remove()
   ghost.remove()
+}
+
+function getDropZone(element) {
+  if (element.matches("[data-drop-zone]")) return element
+  else return element.closest("[data-drop-zone]")
 }
