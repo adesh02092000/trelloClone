@@ -4,13 +4,14 @@ export default function setup() {
   addGlobalEventListener("mousedown", "[data-draggable]", e => {
     const selectedItem = e.target
     const itemClone = selectedItem.cloneNode(true)
+    const ghost = selectedItem.cloneNode() // deep copy is not needed
 
-    const offset = setupDragItems(selectedItem, itemClone, e)
+    const offset = setupDragItems(selectedItem, itemClone, ghost, e)
     setupDragEvents(selectedItem, itemClone, offset)
   })
 }
 
-function setupDragItems(selectedItem, itemClone, e) {
+function setupDragItems(selectedItem, itemClone, ghost, e) {
   const originalRect = selectedItem.getBoundingClientRect()
   const offset = {
     x: e.clientX - originalRect.left,
@@ -22,6 +23,12 @@ function setupDragItems(selectedItem, itemClone, e) {
   itemClone.classList.add("dragging")
   positionClone(itemClone, e, offset)
   document.body.append(itemClone)
+
+  ghost.style.height = `${originalRect.height}px`
+  ghost.classList.add("ghost")
+  // ghost.innerHTML = ""
+  selectedItem.parentElement.insertBefore(ghost, selectedItem) // Insert the ghost before the selected item,
+  // Since the selected item will be hidden once it is moved, and the ghost will take it's place
 
   return offset
 }
@@ -48,5 +55,3 @@ function positionClone(itemClone, e, offset) {
   itemClone.style.top = `${e.clientY - offset.y}px`
   itemClone.style.left = `${e.clientX - offset.x}px`
 }
-
-// Drag done; on to drop
