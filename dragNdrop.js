@@ -34,10 +34,16 @@ function setupDragItems(selectedItem, itemClone, ghost, e) {
 
 function setupDragEvents(selectedItem, itemClone, ghost, offset) {
   const mouseMoveFunc = e => {
-    const dropZone = getDropZone(e.target) // e.target is the element where the cursor ends up (can be task, tasks or document)
+    const dropZone = getDropZone(e.target)
     positionClone(itemClone, e, offset)
-    if (dropZone == null) return // item is placed outside of the drag zone
-    dropZone.append(ghost)
+    if (dropZone == null) return
+    // dropZone == tasks
+    const closestChild = Array.from(dropZone.children).find(child => {
+      const rect = child.getBoundingClientRect()
+      return e.clientY < rect.top + rect.height / 2
+    })
+    if (closestChild != null) dropZone.insertBefore(ghost, closestChild)
+    else dropZone.append(ghost)
   }
   document.addEventListener("mousemove", mouseMoveFunc)
 
