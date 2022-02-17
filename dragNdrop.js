@@ -18,7 +18,10 @@ export default function setup() {
         document.removeEventListener("mousemove", mouseMoveFunc)
         console.log("Mouse up")
       },
-      { once: true }
+      { once: true } // Runs the event listener once and then removes it.
     )
   })
 }
+
+// Added the move and up event listners inside the mousedown, since we only want to track move and up,
+// after a draggable is click (mouse down)
