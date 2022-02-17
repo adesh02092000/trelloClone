@@ -7,7 +7,7 @@ export default function setup() {
     const ghost = selectedItem.cloneNode() // deep copy is not needed
 
     const offset = setupDragItems(selectedItem, itemClone, ghost, e)
-    setupDragEvents(selectedItem, itemClone, offset)
+    setupDragEvents(selectedItem, itemClone, ghost, offset)
   })
 }
 
@@ -33,7 +33,7 @@ function setupDragItems(selectedItem, itemClone, ghost, e) {
   return offset
 }
 
-function setupDragEvents(selectedItem, itemClone, offset) {
+function setupDragEvents(selectedItem, itemClone, ghost, offset) {
   const mouseMoveFunc = e => {
     positionClone(itemClone, e, offset)
   }
@@ -45,6 +45,7 @@ function setupDragEvents(selectedItem, itemClone, offset) {
       document.removeEventListener("mousemove", mouseMoveFunc)
       selectedItem.classList.remove("hide")
       itemClone.remove()
+      ghost.remove()
       console.log("Mouse up")
     },
     { once: true }
