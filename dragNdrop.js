@@ -9,8 +9,8 @@ export default function setup() {
     document.body.append(itemClone)
     selectedItem.classList.add("hide")
 
-    const mouseMoveFunc = () => {
-      console.log("Mouse move")
+    const mouseMoveFunc = e => {
+      positionClone(itemClone, e)
     }
     document.addEventListener("mousemove", mouseMoveFunc)
 
@@ -19,7 +19,7 @@ export default function setup() {
       e => {
         document.removeEventListener("mousemove", mouseMoveFunc)
         selectedItem.classList.remove("hide")
-        itemClone.remove() // remove the clone one the mouse is up, so that they don't stay in the air(dragged position)
+        itemClone.remove()
         console.log("Mouse up")
       },
       { once: true }
