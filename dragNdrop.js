@@ -4,16 +4,8 @@ export default function setup() {
   addGlobalEventListener("mousedown", "[data-draggable]", e => {
     const selectedItem = e.target
     const itemClone = selectedItem.cloneNode(true)
-    const originalRect = selectedItem.getBoundingClientRect() // gives the dimensions of the item
-    const offset = {
-      x: e.clientX - originalRect.left,
-      y: e.clientY - originalRect.top,
-    }
-    itemClone.style.width = `${originalRect.width}px` // Make sure the dimensions of clone remains the same
-    itemClone.classList.add("dragging")
-    positionClone(itemClone, e, offset)
-    document.body.append(itemClone)
-    selectedItem.classList.add("hide")
+
+    const offset = setupDragItems(selectedItem, itemClone, e)
 
     const mouseMoveFunc = e => {
       positionClone(itemClone, e, offset)
@@ -31,6 +23,22 @@ export default function setup() {
       { once: true }
     )
   })
+}
+
+function setupDragItems(selectedItem, itemClone, e) {
+  const originalRect = selectedItem.getBoundingClientRect()
+  const offset = {
+    x: e.clientX - originalRect.left,
+    y: e.clientY - originalRect.top,
+  }
+  selectedItem.classList.add("hide")
+
+  itemClone.style.width = `${originalRect.width}px`
+  itemClone.classList.add("dragging")
+  positionClone(itemClone, e, offset)
+  document.body.append(itemClone)
+
+  return offset
 }
 
 function positionClone(itemClone, e, offset) {
