@@ -48,3 +48,5 @@ function positionClone(itemClone, e, offset) {
   itemClone.style.top = `${e.clientY - offset.y}px`
   itemClone.style.left = `${e.clientX - offset.x}px`
 }
+
+// Drag done; on to drop
