@@ -1,3 +1,7 @@
 import setup from "./dragNdrop"
 
-setup()
+setup(onDragComplete)
+
+function onDragComplete(dataObj) {
+  console.log(dataObj)
+}
