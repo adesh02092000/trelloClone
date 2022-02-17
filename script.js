@@ -1,4 +1,17 @@
 import setup from "./dragNdrop"
+import { v4 as uuidV4 } from "uuid"
+
+const STORAGE_PREFIX = "TRELLO_CLONE"
+const LANES_STORAGE_KEY = `${STORAGE_PREFIX}-lanes`
+const DEFAULT_LANES = {
+  backlog: [{ id: uuidV4(), text: "Create your first task" }],
+  working: [],
+  done: [],
+}
+
+const lanes = loadLanes()
+
+console.log(lanes)
 
 setup(onDragComplete)
 
@@ -6,6 +19,7 @@ function onDragComplete(dataObj) {
   console.log(dataObj)
 }
 
-// At this point we don't need to worry about how the drag and drop functionality works
-// all we care about is that the onDragComplete function is called when ever there is a
-// successful item dragged.
+function loadLanes() {
+  const lanesJson = localStorage.getItem(LANES_STORAGE_KEY)
+  return JSON.parse(lanesJson) || DEFAULT_LANES
+}
