@@ -6,22 +6,7 @@ export default function setup() {
     const itemClone = selectedItem.cloneNode(true)
 
     const offset = setupDragItems(selectedItem, itemClone, e)
-
-    const mouseMoveFunc = e => {
-      positionClone(itemClone, e, offset)
-    }
-    document.addEventListener("mousemove", mouseMoveFunc)
-
-    document.addEventListener(
-      "mouseup",
-      e => {
-        document.removeEventListener("mousemove", mouseMoveFunc)
-        selectedItem.classList.remove("hide")
-        itemClone.remove()
-        console.log("Mouse up")
-      },
-      { once: true }
-    )
+    setupDragEvents(selectedItem, itemClone, offset)
   })
 }
 
@@ -39,6 +24,24 @@ function setupDragItems(selectedItem, itemClone, e) {
   document.body.append(itemClone)
 
   return offset
+}
+
+function setupDragEvents(selectedItem, itemClone, offset) {
+  const mouseMoveFunc = e => {
+    positionClone(itemClone, e, offset)
+  }
+  document.addEventListener("mousemove", mouseMoveFunc)
+
+  document.addEventListener(
+    "mouseup",
+    e => {
+      document.removeEventListener("mousemove", mouseMoveFunc)
+      selectedItem.classList.remove("hide")
+      itemClone.remove()
+      console.log("Mouse up")
+    },
+    { once: true }
+  )
 }
 
 function positionClone(itemClone, e, offset) {
