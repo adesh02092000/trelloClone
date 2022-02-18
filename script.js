@@ -25,12 +25,16 @@ function onDragComplete(dataObj) {
   const task = startLaneTasks.find(t => t.id === dataObj.dragElement.id)
   startLaneTasks.splice(startLaneTasks.indexOf(task), 1) // start at the index of task and remove 1 element
   endLaneTasks.splice(dataObj.index, 0, task) // start from the index where the task is inserted, remove 0 element and insert task
-  console.log(lanes)
+  saveLanes()
 }
 
 function loadLanes() {
   const lanesJson = localStorage.getItem(LANES_STORAGE_KEY)
   return JSON.parse(lanesJson) || DEFAULT_LANES
+}
+
+function saveLanes() {
+  localStorage.setItem(LANES_STORAGE_KEY, JSON.stringify(lanes))
 }
 
 function renderTasks() {
