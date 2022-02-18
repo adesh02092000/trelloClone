@@ -1,5 +1,6 @@
 import setup from "./dragNdrop"
 import { v4 as uuidV4 } from "uuid"
+import addGlobalEventListener from "./utils/addGlobalEventListener"
 
 const STORAGE_PREFIX = "TRELLO_CLONE"
 const LANES_STORAGE_KEY = `${STORAGE_PREFIX}-lanes`
@@ -14,6 +15,25 @@ const lanes = loadLanes()
 renderTasks()
 
 setup(onDragComplete)
+
+addGlobalEventListener("submit", "[data-task-form]", e => {
+  e.preventDefault()
+
+  const taskInput = e.target.querySelector("[data-task-input]")
+  const taskText = taskInput.value
+  if (taskText.trim() === "") return
+
+  const task = { id: uuidV4(), text: taskText }
+  const laneElement = e.target.closest(".lane").querySelector("[data-lane-id]")
+
+  lanes[laneElement.dataset.laneId].push(task)
+
+  const taskElement = createTaskElement(task)
+  laneElement.append(taskElement)
+  taskInput.value = ""
+
+  saveLanes()
+})
 
 function onDragComplete(dataObj) {
   const startLaneId = dataObj.startZone.dataset.laneId
