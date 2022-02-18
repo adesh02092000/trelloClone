@@ -16,7 +16,16 @@ renderTasks()
 setup(onDragComplete)
 
 function onDragComplete(dataObj) {
-  console.log(dataObj)
+  const startLaneId = dataObj.startZone.dataset.laneId
+  const endLaneId = dataObj.endZone.dataset.laneId
+  const startLaneTasks = lanes[startLaneId]
+  const endLaneTasks = lanes[endLaneId] // Used [] notation instead of ., since we need to refer the key inside the variable
+
+  // get the dragged task
+  const task = startLaneTasks.find(t => t.id === dataObj.dragElement.id)
+  startLaneTasks.splice(startLaneTasks.indexOf(task), 1) // start at the index of task and remove 1 element
+  endLaneTasks.splice(dataObj.index, 0, task) // start from the index where the task is inserted, remove 0 element and insert task
+  console.log(lanes)
 }
 
 function loadLanes() {
@@ -35,9 +44,6 @@ function renderTasks() {
     })
   })
 }
-
-// To loop through objects, use Object.entries()
-//  obj = { a : 1, b : 2} , Object.entries(obj) ==> [[a, 1], [b, 2]]
 
 function createTaskElement(task) {
   const element = document.createElement("div")
